@@ -4,20 +4,7 @@
     <h5 class="my-3 border-bottom pb-2">질문등록</h5>
     <form method="post" class="my-3">
         {{ form.csrf_token }}
-        <!-- 오류표시 Start -->
-        {% if form.errors %}
-        <div class="alert alert-danger" role="alert">
-            {% for field, errors in form.errors.items() %}
-            <strong>{{ form[field].label }}</strong>
-            <ul>
-                {% for error in errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-            {% endfor %}
-        </div>
-        {% endif %}
-        <!-- 오류표시 End -->
+        {% include "form_errors.html" %}
         <div class="mb-3">
             <label for="subject">제목</label>
             <input type="text" class="form-control" name="subject" id="subject"
