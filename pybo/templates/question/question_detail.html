@@ -41,6 +41,7 @@
     <!-- 답변 목록 -->
     <h5 class="border-bottom my-3 py-2">{{ question.answer_set|length }}개의 답변이 있습니다.</h5>
     {% for answer in question.answer_set %}
+    <a id="answer_{{ answer.id }}"></a>
     <div class="card my-3">
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line;">{{ answer.content }}</div>
