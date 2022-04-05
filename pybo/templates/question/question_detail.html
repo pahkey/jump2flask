@@ -1,32 +1,63 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container my-3">
+    <!-- 질문 -->
     <h2 class="border-bottom py-2">{{ question.subject }}</h2>
     <div class="card my-3">
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line;">{{ question.content }}</div>
             <div class="d-flex justify-content-end">
+                {% if question.modify_date %}
+                <div class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="mb-2">modified at</div>
+                    <div>{{ question.modify_date|datetime }}</div>
+                </div>
+                {% endif %}
                 <div class="badge bg-light text-dark p-2 text-start">
                     <div class="mb-2">{{ question.user.username }}</div>
                     <div>{{ question.create_date|datetime }}</div>
                 </div>
             </div>
+            <div class="my-3">
+                {% if g.user == question.user %}
+                <a href="{{ url_for('question.modify', question_id=question.id) }}"
+                   class="btn btn-sm btn-outline-secondary">수정</a>
+                <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-secondary"
+                   data-uri="{{ url_for('question.delete', question_id=question.id) }}">삭제</a>
+                {% endif %}
+            </div>
         </div>
     </div>
+    <!-- 답변 목록 -->
     <h5 class="border-bottom my-3 py-2">{{ question.answer_set|length }}개의 답변이 있습니다.</h5>
     {% for answer in question.answer_set %}
     <div class="card my-3">
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line;">{{ answer.content }}</div>
             <div class="d-flex justify-content-end">
+                {% if answer.modify_date %}
+                <div class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="mb-2">modified at</div>
+                    <div>{{ answer.modify_date|datetime }}</div>
+                </div>
+                {% endif %}
                 <div class="badge bg-light text-dark p-2 text-start">
                     <div class="mb-2">{{ answer.user.username }}</div>
                     <div>{{ answer.create_date|datetime }}</div>
                 </div>
             </div>
+            <div class="my-3">
+                {% if g.user == answer.user %}
+                <a href="{{ url_for('answer.modify', answer_id=answer.id) }}"
+                   class="btn btn-sm btn-outline-secondary">수정</a>
+                <a href="#" class="delete btn btn-sm btn-outline-secondary "
+                   data-uri="{{ url_for('answer.delete', answer_id=answer.id) }}">삭제</a>
+                {% endif %}
+            </div>
         </div>
     </div>
     {% endfor %}
+    <!-- 답변 작성 -->
     <form action="{{ url_for('answer.create', question_id=question.id) }}" method="post" class="my-3">
         {{ form.csrf_token }}
         {% include "form_errors.html" %}
@@ -38,4 +69,16 @@
         <input type="submit" value="답변등록" class="btn btn-primary">
     </form>
 </div>
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+const delete_elements = document.getElementsByClassName("delete");
+Array.from(delete_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = this.dataset.uri;
+        };
+    });
+});
+</script>
 {% endblock %}
