@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container my-3">
+    <!-- flash 오류 -->
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-danger" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
     <!-- 질문 -->
     <h2 class="border-bottom py-2">{{ question.subject }}</h2>
     <div class="card my-3">
@@ -19,6 +25,10 @@
                 </div>
             </div>
             <div class="my-3">
+                <a href="javascript:void(0)" data-uri="{{ url_for('question.vote', question_id=question.id) }}"
+                   class="recommend btn btn-sm btn-outline-secondary"> 추천
+                    <span class="badge rounded-pill bg-success">{{ question.voter|length }}</span>
+                </a>
                 {% if g.user == question.user %}
                 <a href="{{ url_for('question.modify', question_id=question.id) }}"
                    class="btn btn-sm btn-outline-secondary">수정</a>
@@ -47,10 +57,14 @@
                 </div>
             </div>
             <div class="my-3">
+                <a href="javascript:void(0)" data-uri="{{ url_for('answer.vote', answer_id=answer.id) }}"
+                   class="recommend btn btn-sm btn-outline-secondary"> 추천
+                    <span class="badge rounded-pill bg-success">{{ answer.voter|length }}</span>
+                </a>
                 {% if g.user == answer.user %}
                 <a href="{{ url_for('answer.modify', answer_id=answer.id) }}"
                    class="btn btn-sm btn-outline-secondary">수정</a>
-                <a href="#" class="delete btn btn-sm btn-outline-secondary "
+                <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-secondary "
                    data-uri="{{ url_for('answer.delete', answer_id=answer.id) }}">삭제</a>
                 {% endif %}
             </div>
@@ -60,7 +74,18 @@
     <!-- 답변 작성 -->
     <form action="{{ url_for('answer.create', question_id=question.id) }}" method="post" class="my-3">
         {{ form.csrf_token }}
-        {% include "form_errors.html" %}
+        {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for field, errors in form.errors.items() %}
+            <strong>{{ form[field].label }}</strong>
+            <ul>
+                {% for error in errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endfor %}
+        </div>
+        {% endif %}
         <div class="mb-3">
             <label for="content">답변 내용</label>
             <textarea {% if not g.user %}disabled{% endif %}
@@ -80,5 +105,15 @@ Array.from(delete_elements).forEach(function(element) {
         };
     });
 });
+const recommend_elements = document.getElementsByClassName("recommend");
+Array.from(recommend_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        if(confirm("정말로 추천하시겠습니까?")) {
+            location.href = this.dataset.uri;
+        };
+    });
+});
+
+
 </script>
 {% endblock %}

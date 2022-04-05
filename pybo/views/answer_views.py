@@ -55,3 +55,15 @@ def delete(answer_id):
         db.session.delete(answer)
         db.session.commit()
     return redirect(url_for('question.detail', question_id=question_id))
+
+
+@bp.route('/vote/<int:answer_id>/')
+@login_required
+def vote(answer_id):
+    _answer = Answer.query.get_or_404(answer_id)
+    if g.user == _answer.user:
+        flash('본인이 작성한 글은 추천할수 없습니다')
+    else:
+        _answer.voter.append(g.user)
+        db.session.commit()
+    return redirect(url_for('question.detail', question_id=_answer.question.id))
