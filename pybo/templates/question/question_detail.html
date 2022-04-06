@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container my-3">
+    <!-- 질문 -->
     <h2 class="border-bottom py-2">{{ question.subject }}</h2>
     <div class="card my-3">
         <div class="card-body">
@@ -12,6 +13,7 @@
             </div>
         </div>
     </div>
+    <!-- 답변 목록 -->
     <h5 class="border-bottom my-3 py-2">{{ question.answer_set|length }}개의 답변이 있습니다.</h5>
     {% for answer in question.answer_set %}
     <div class="card my-3">
@@ -25,6 +27,7 @@
         </div>
     </div>
     {% endfor %}
+    <!-- 답변 작성 -->
     <form action="{{ url_for('answer.create', question_id=question.id) }}" method="post" class="my-3">
         {{ form.csrf_token }}
         <!-- 오류표시 Start -->
