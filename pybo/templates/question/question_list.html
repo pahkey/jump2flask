@@ -36,7 +36,7 @@
         </li>
         {% else %}
         <li class="page-item disabled">
-            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="javascript:void(0)">이전</a>
         </li>
         {% endif %}
         {% for page_num in question_list.iter_pages() %}
@@ -47,12 +47,12 @@
         </li>
         {% else %}
         <li class="page-item active" aria-current="page">
-            <a class="page-link" href="#">{{ page_num }}</a>
+            <a class="page-link" href="javascript:void(0)">{{ page_num }}</a>
         </li>
         {% endif %}
         {% else %}
         <li class="disabled">
-            <a class="page-link" href="#">...</a>
+            <a class="page-link" href="javascript:void(0)">...</a>
         </li>
         {% endif %}
         {% endfor %}
@@ -63,7 +63,7 @@
         </li>
         {% else %}
         <li class="page-item disabled">
-            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="javascript:void(0)">다음</a>
         </li>
         {% endif %}
     </ul>
