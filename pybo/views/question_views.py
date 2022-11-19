@@ -30,7 +30,7 @@ def _list():
                     sub_query.c.username.ilike(search)  # 답변 작성자
                     ) \
             .distinct()
-    question_list = question_list.paginate(page, per_page=10)
+    question_list = question_list.paginate(page=page, per_page=10)
     return render_template('question/question_list.html', question_list=question_list, page=page, kw=kw)
 
 
