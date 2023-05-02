@@ -3,6 +3,8 @@
 # Prepare log files and start outputting logs to stdout
 # tail -n 0 -f /root/wikidocs/logs/gunicorn*.log &
 
+# flask run --host 0.0.0.0 --port 8000
+
 exec gunicorn "pybo:create_app()" \
   --reload \
   --name mysite \
